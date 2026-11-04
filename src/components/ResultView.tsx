@@ -6,13 +6,9 @@ import {
   SlidersHorizontal,
   MessageCircle,
   UserPlus,
-  ShieldCheck,
-  ArrowRight,
   Sparkles,
-  Users,
   Copy,
   Check,
-  Building,
 } from 'lucide-react';
 import {
   CapturedLead,
@@ -59,7 +55,7 @@ export const ResultView: React.FC<ResultViewProps> = ({
   const canAdjustToGreenCertificate =
     directQualifiedAmount >= MIN_CERTIFICATE_USD;
 
-  // Visual & Psychological Configuration per Traffic Light
+  // Visual & Psychological Configuration per Traffic Light using FonBienes Colors
   const tierConfig = {
     GREEN: {
       statusLabel: 'Precalificó',
@@ -69,13 +65,17 @@ export const ResultView: React.FC<ResultViewProps> = ({
         0
       )} USD en FonBienes.`,
       themeBg: isDark
-        ? 'bg-gradient-to-b from-[#0F291E] to-[#0A1A14] border-emerald-700/50'
-        : 'bg-gradient-to-b from-[#F0FDF4] to-[#FFFFFF] border-emerald-200/80',
-      badgeBg: isDark ? 'bg-emerald-950/80 border-emerald-700 text-emerald-400' : 'bg-emerald-50 border-emerald-200 text-emerald-700',
-      circleRing: isDark ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30 ring-emerald-500/10' : 'bg-emerald-100 text-emerald-600 border-emerald-200 ring-emerald-100',
-      accentColor: isDark ? 'text-emerald-400' : 'text-emerald-600',
-      meterColor: 'bg-emerald-500',
-      primaryBtnBg: 'bg-emerald-600 hover:bg-emerald-700 text-white',
+        ? 'bg-gradient-to-b from-[#0B2518] to-[#07170E] border-emerald-700/50'
+        : 'bg-gradient-to-b from-[#E8F6EE] via-[#F4FBF7] to-[#FFFFFF] border-[#008744]/25',
+      badgeBg: isDark
+        ? 'bg-emerald-950/80 border-emerald-700 text-emerald-400'
+        : 'bg-[#E8F6EE] border-[#008744]/30 text-[#008744]',
+      circleRing: isDark
+        ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30 ring-emerald-500/10'
+        : 'bg-[#E8F6EE] text-[#008744] border-[#008744]/30 ring-[#E8F6EE]',
+      accentColor: isDark ? 'text-emerald-400' : 'text-[#008744]',
+      meterColor: 'bg-[#008744]',
+      primaryBtnBg: 'bg-[#008744] hover:bg-[#006E37] text-white',
     },
     YELLOW: {
       statusLabel: 'Requiere Evaluación',
@@ -83,9 +83,13 @@ export const ResultView: React.FC<ResultViewProps> = ({
       hookText: `Estás muy cerca de la aprobación directa (cubres el ${metrics.standardCoveragePercent}%). Puedes adjudicar hoy sumando a un co-titular o ajustando el certificado.`,
       themeBg: isDark
         ? 'bg-gradient-to-b from-[#2B1F0C] to-[#171207] border-amber-700/50'
-        : 'bg-gradient-to-b from-[#FFFBEB] to-[#FFFFFF] border-amber-200/80',
-      badgeBg: isDark ? 'bg-amber-950/80 border-amber-700 text-amber-400' : 'bg-amber-50 border-amber-200 text-amber-700',
-      circleRing: isDark ? 'bg-amber-500/20 text-amber-400 border-amber-500/30 ring-amber-500/10' : 'bg-amber-100 text-amber-600 border-amber-200 ring-amber-100',
+        : 'bg-gradient-to-b from-[#FFFBEB] via-[#FFFDF5] to-[#FFFFFF] border-amber-200/80',
+      badgeBg: isDark
+        ? 'bg-amber-950/80 border-amber-700 text-amber-400'
+        : 'bg-amber-50 border-amber-200 text-amber-700',
+      circleRing: isDark
+        ? 'bg-amber-500/20 text-amber-400 border-amber-500/30 ring-amber-500/10'
+        : 'bg-amber-100 text-amber-600 border-amber-200 ring-amber-100',
       accentColor: isDark ? 'text-amber-400' : 'text-amber-600',
       meterColor: 'bg-amber-500',
       primaryBtnBg: 'bg-amber-600 hover:bg-amber-700 text-white',
@@ -100,16 +104,19 @@ export const ResultView: React.FC<ResultViewProps> = ({
         : `Para este monto se requiere consolidar ingresos con cónyuge o familiar directo. Tu asesor puede estructurar una alternativa personalizada.`,
       themeBg: isDark
         ? 'bg-gradient-to-b from-[#2B1219] to-[#170B0E] border-rose-800/50'
-        : 'bg-gradient-to-b from-[#FEF2F2] to-[#FFFFFF] border-rose-200/80',
-      badgeBg: isDark ? 'bg-rose-950/80 border-rose-800 text-rose-400' : 'bg-rose-50 border-rose-200 text-rose-700',
-      circleRing: isDark ? 'bg-rose-500/20 text-rose-400 border-rose-500/30 ring-rose-500/10' : 'bg-rose-100 text-rose-600 border-rose-200 ring-rose-100',
+        : 'bg-gradient-to-b from-[#FEF2F2] via-[#FFF5F5] to-[#FFFFFF] border-rose-200/80',
+      badgeBg: isDark
+        ? 'bg-rose-950/80 border-rose-800 text-rose-400'
+        : 'bg-rose-50 border-rose-200 text-rose-700',
+      circleRing: isDark
+        ? 'bg-rose-500/20 text-rose-400 border-rose-500/30 ring-rose-500/10'
+        : 'bg-rose-100 text-rose-600 border-rose-200 ring-rose-100',
       accentColor: isDark ? 'text-rose-400' : 'text-rose-600',
       meterColor: 'bg-rose-500',
-      primaryBtnBg: 'bg-[#081C59] dark:bg-[#0C6CFB] hover:bg-[#0E2B85] text-white',
+      primaryBtnBg: 'bg-[#004E89] hover:bg-[#003865] text-white',
     },
   }[metrics.tier];
 
-  // Ratio percentage capped for gauge
   const gaugePercent = Math.min(100, Math.max(10, (metrics.incomeToQuotaRatio / 2.0) * 100));
 
   return (
@@ -118,14 +125,14 @@ export const ResultView: React.FC<ResultViewProps> = ({
       <div
         className={`relative rounded-3xl p-6 sm:p-8 border shadow-apple-card text-center overflow-hidden transition-all duration-300 ${tierConfig.themeBg}`}
       >
-        {/* Subtle Decorative Confetti for Green Approval (Inspired by Reference Image 3) */}
+        {/* Subtle Decorative Confetti for Green Approval */}
         {metrics.tier === 'GREEN' && (
           <div className="absolute inset-0 pointer-events-none overflow-hidden select-none opacity-40">
-            <span className="absolute top-4 left-8 w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-            <span className="absolute top-8 right-12 w-2.5 h-2.5 rounded-sm bg-amber-400 rotate-45" />
-            <span className="absolute bottom-16 left-10 w-2 h-2 rounded-full bg-blue-400" />
-            <span className="absolute top-12 right-6 w-2 h-2 rounded-full bg-emerald-500" />
-            <span className="absolute bottom-12 right-14 w-1.5 h-3 bg-pink-400 rotate-12" />
+            <span className="absolute top-4 left-8 w-2 h-2 rounded-full bg-[#008744] animate-ping" />
+            <span className="absolute top-8 right-12 w-2.5 h-2.5 rounded-sm bg-[#004E89] rotate-45" />
+            <span className="absolute bottom-16 left-10 w-2 h-2 rounded-full bg-sky-400" />
+            <span className="absolute top-12 right-6 w-2 h-2 rounded-full bg-[#008744]" />
+            <span className="absolute bottom-12 right-14 w-1.5 h-3 bg-amber-400 rotate-12" />
           </div>
         )}
 
@@ -137,20 +144,20 @@ export const ResultView: React.FC<ResultViewProps> = ({
             className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-mono font-semibold transition-all ${
               isDark
                 ? 'bg-slate-900/80 border-slate-700 text-slate-300'
-                : 'bg-white/80 border-black/[0.08] text-[#081C59]'
+                : 'bg-white/80 border-[#004E89]/20 text-[#004E89]'
             }`}
             title="Copiar código de reserva"
           >
             <span>Código: {lead.reservationCode}</span>
             {copiedCode ? (
-              <Check className="w-3.5 h-3.5 text-emerald-500" strokeWidth={1.5} />
+              <Check className="w-3.5 h-3.5 text-[#008744]" strokeWidth={1.5} />
             ) : (
               <Copy className="w-3.5 h-3.5 opacity-60" strokeWidth={1.5} />
             )}
           </button>
         </div>
 
-        {/* Central Circular Hero Icon (Inspired by Popup Examples) */}
+        {/* Central Circular Hero Icon */}
         <div className="flex justify-center mb-4">
           <div
             className={`w-20 h-20 sm:w-24 sm:h-24 rounded-full border-2 ring-8 flex items-center justify-center transition-transform hover:scale-105 duration-300 ${tierConfig.circleRing}`}
@@ -172,7 +179,7 @@ export const ResultView: React.FC<ResultViewProps> = ({
           <span
             className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border ${tierConfig.badgeBg}`}
           >
-            {metrics.tier === 'GREEN' && <Sparkles className="w-3.5 h-3.5" />}
+            {metrics.tier === 'GREEN' && <Sparkles className="w-3.5 h-3.5 text-[#008744]" />}
             {metrics.tier === 'YELLOW' && <Clock className="w-3.5 h-3.5" />}
             {metrics.tier === 'RED' && <AlertCircle className="w-3.5 h-3.5" />}
             <span>{tierConfig.statusLabel}</span>
@@ -188,7 +195,7 @@ export const ResultView: React.FC<ResultViewProps> = ({
           {tierConfig.headline}
         </h1>
 
-        {/* Psychological Sales Hook (Short, Punchy, Never a dead end) */}
+        {/* Psychological Sales Hook */}
         <p
           className={`text-sm sm:text-base leading-relaxed max-w-md mx-auto mb-6 ${
             isDark ? 'text-slate-300' : 'text-[#6E6E73]'
@@ -197,12 +204,12 @@ export const ResultView: React.FC<ResultViewProps> = ({
           {tierConfig.hookText}
         </p>
 
-        {/* UNIFIED FINANCIAL SNAPSHOT BOX (Clear Numbers, No Heavy Stacked Cards) */}
+        {/* UNIFIED FINANCIAL SNAPSHOT BOX */}
         <div
           className={`rounded-2xl p-4 sm:p-5 border text-left mb-6 ${
             isDark
               ? 'bg-[#131C31]/90 border-slate-700/80 text-white'
-              : 'bg-white border-black/[0.08] text-[#1D1D1F]'
+              : 'bg-white border-black/[0.08] shadow-2xs text-[#1D1D1F]'
           }`}
         >
           <div className="grid grid-cols-2 gap-4 pb-3 border-b border-black/[0.06] dark:border-white/10">
@@ -216,7 +223,7 @@ export const ResultView: React.FC<ResultViewProps> = ({
               </span>
               <div
                 className={`text-xl sm:text-2xl font-bold tracking-tight tabular-nums ${
-                  isDark ? 'text-sky-400' : 'text-[#081C59]'
+                  isDark ? 'text-sky-400' : 'text-[#004E89]'
                 }`}
               >
                 {formatUSD(metrics.requestedAmountUSD, 0)}
@@ -241,7 +248,7 @@ export const ResultView: React.FC<ResultViewProps> = ({
               <div
                 className={`text-xl sm:text-2xl font-bold tracking-tight tabular-nums ${
                   metrics.tier === 'GREEN'
-                    ? 'text-emerald-500'
+                    ? 'text-[#008744]'
                     : isDark
                     ? 'text-white'
                     : 'text-[#1D1D1F]'
@@ -297,7 +304,7 @@ export const ResultView: React.FC<ResultViewProps> = ({
             href={buildWhatsAppUrl(lead)}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full py-4 px-6 rounded-2xl bg-[#0C6CFB] hover:bg-[#0958D3] active:scale-[0.99] text-white font-bold text-sm sm:text-base flex items-center justify-center gap-2 shadow-apple-pill transition-all duration-200 ease-apple"
+            className="w-full py-4 px-6 rounded-2xl bg-[#008744] hover:bg-[#006E37] active:scale-[0.99] text-white font-bold text-sm sm:text-base flex items-center justify-center gap-2 shadow-bienes-cta transition-all duration-200 ease-apple"
           >
             <MessageCircle className="w-5 h-5" strokeWidth={1.75} />
             <span>
@@ -312,9 +319,9 @@ export const ResultView: React.FC<ResultViewProps> = ({
             <button
               type="button"
               onClick={() => onUpdateAmountLive(directQualifiedAmount)}
-              className="w-full py-3 px-5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-xs"
+              className="w-full py-3.5 px-5 rounded-2xl bg-gradient-to-r from-[#004E89] to-[#0062AB] hover:from-[#003865] hover:to-[#004E89] text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-fon-cta"
             >
-              <CheckCircle2 className="w-4 h-4" strokeWidth={1.5} />
+              <CheckCircle2 className="w-4 h-4 text-[#008744]" strokeWidth={1.5} />
               <span>Aprobar Inmediato por {formatUSD(directQualifiedAmount, 0)} USD</span>
             </button>
           )}
@@ -326,10 +333,10 @@ export const ResultView: React.FC<ResultViewProps> = ({
               onClick={() => setShowLiveSimulator((prev) => !prev)}
               className={`py-3 px-3 rounded-xl border text-xs font-semibold flex items-center justify-center gap-1.5 transition-all ${
                 showLiveSimulator
-                  ? 'bg-[#081C59] dark:bg-slate-700 text-white border-transparent'
+                  ? 'bg-[#004E89] text-white border-transparent'
                   : isDark
                   ? 'bg-slate-900/80 hover:bg-slate-800 text-slate-200 border-slate-700'
-                  : 'bg-white hover:bg-black/[0.04] text-[#1D1D1F] border-black/[0.08]'
+                  : 'bg-white hover:bg-[#EBF3FA] hover:text-[#004E89] text-[#1D1D1F] border-black/[0.08]'
               }`}
             >
               <SlidersHorizontal className="w-3.5 h-3.5" strokeWidth={1.5} />
@@ -342,7 +349,7 @@ export const ResultView: React.FC<ResultViewProps> = ({
               className={`py-3 px-3 rounded-xl border text-xs font-semibold flex items-center justify-center gap-1.5 transition-all ${
                 isDark
                   ? 'bg-slate-900/80 hover:bg-slate-800 text-slate-200 border-slate-700'
-                  : 'bg-white hover:bg-black/[0.04] text-[#1D1D1F] border-black/[0.08]'
+                  : 'bg-white hover:bg-[#EBF3FA] hover:text-[#004E89] text-[#1D1D1F] border-black/[0.08]'
               }`}
             >
               <UserPlus className="w-3.5 h-3.5" strokeWidth={1.5} />
@@ -358,19 +365,19 @@ export const ResultView: React.FC<ResultViewProps> = ({
           className={`rounded-3xl p-5 border shadow-apple-card space-y-4 animate-fadeIn ${
             isDark
               ? 'bg-[#131C31] border-slate-700 text-white'
-              : 'bg-white border-[#0C6CFB]/30 text-[#1D1D1F]'
+              : 'bg-white border-[#004E89]/25 text-[#1D1D1F]'
           }`}
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <SlidersHorizontal className="w-4 h-4 text-[#0C6CFB]" strokeWidth={1.5} />
-              <h3 className="text-xs font-bold uppercase tracking-wider">
+              <SlidersHorizontal className="w-4 h-4 text-[#004E89] dark:text-sky-400" strokeWidth={1.5} />
+              <h3 className="text-xs font-bold uppercase tracking-wider text-[#004E89] dark:text-sky-400">
                 Ajustar Certificado en Vivo
               </h3>
             </div>
             <span
               className={`text-sm font-bold tabular-nums ${
-                isDark ? 'text-sky-400' : 'text-[#081C59]'
+                isDark ? 'text-sky-400' : 'text-[#004E89]'
               }`}
             >
               {formatUSD(metrics.requestedAmountUSD, 0)}
@@ -387,7 +394,7 @@ export const ResultView: React.FC<ResultViewProps> = ({
               Math.max(MIN_CERTIFICATE_USD, metrics.requestedAmountUSD)
             )}
             onChange={(e) => onUpdateAmountLive(Number(e.target.value))}
-            className="w-full accent-[#0C6CFB] h-2 rounded-lg cursor-pointer"
+            className="w-full accent-[#004E89] h-2 rounded-lg cursor-pointer"
           />
 
           <div className="flex flex-wrap gap-1.5">
@@ -398,10 +405,10 @@ export const ResultView: React.FC<ResultViewProps> = ({
                 onClick={() => onUpdateAmountLive(amt)}
                 className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold tabular-nums transition-all ${
                   metrics.requestedAmountUSD === amt
-                    ? 'bg-[#0C6CFB] text-white'
+                    ? 'bg-[#004E89] text-white'
                     : isDark
                     ? 'bg-slate-800 text-slate-300 border border-slate-700'
-                    : 'bg-[#F5F5F7] text-[#1D1D1F] border border-black/[0.06]'
+                    : 'bg-[#F5F5F7] hover:bg-[#EBF3FA] text-[#1D1D1F] border border-black/[0.06]'
                 }`}
               >
                 ${amt / 1000}k
@@ -423,7 +430,7 @@ export const ResultView: React.FC<ResultViewProps> = ({
                     true
                   )
                 }
-                className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-all"
+                className="px-3 py-1.5 rounded-lg bg-[#008744] hover:bg-[#006E37] text-white text-xs font-bold transition-all shadow-xs"
               >
                 + Activar Aprobación (2x Cuota)
               </button>

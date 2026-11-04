@@ -179,7 +179,7 @@ export const LeadDrawer: React.FC<LeadDrawerProps> = ({
         {/* Header */}
         <div className="px-6 py-4 border-b border-black/[0.06] dark:border-white/10 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-[#081C59]/[0.08] dark:bg-sky-500/15 flex items-center justify-center text-[#081C59] dark:text-sky-400">
+            <div className="w-9 h-9 rounded-xl bg-[#004E89]/[0.08] dark:bg-sky-500/15 flex items-center justify-center text-[#004E89] dark:text-sky-400">
               <Users className="w-5 h-5" strokeWidth={1.5} />
             </div>
             <div>
@@ -213,7 +213,7 @@ export const LeadDrawer: React.FC<LeadDrawerProps> = ({
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Buscar por nombre, DNI/RUC o celular..."
-              className="w-full pl-9 pr-4 py-2 bg-white dark:bg-slate-800 rounded-xl border border-black/[0.08] dark:border-white/10 text-xs sm:text-sm text-[#1D1D1F] dark:text-white placeholder-[#6E6E73] dark:placeholder-slate-400 focus:outline-none focus:border-[#0C6CFB]"
+              className="w-full pl-9 pr-4 py-2 bg-white dark:bg-slate-800 rounded-xl border border-black/[0.08] dark:border-white/10 text-xs sm:text-sm text-[#1D1D1F] dark:text-white placeholder-[#6E6E73] dark:placeholder-slate-400 focus:outline-none focus:border-[#008744]"
             />
           </div>
 
@@ -232,7 +232,7 @@ export const LeadDrawer: React.FC<LeadDrawerProps> = ({
                 onClick={() => setTierFilter(tab.id)}
                 className={`px-3 py-1 rounded-full text-xs font-semibold transition-all ${
                   tierFilter === tab.id
-                    ? 'bg-[#081C59] dark:bg-[#0C6CFB] text-white'
+                    ? 'bg-[#004E89] dark:bg-[#008744] text-white'
                     : 'bg-white dark:bg-slate-800 text-[#6E6E73] dark:text-slate-300 border border-black/[0.06] dark:border-white/10'
                 }`}
               >
@@ -293,7 +293,7 @@ export const LeadDrawer: React.FC<LeadDrawerProps> = ({
                       <span className="text-[10px] text-[#6E6E73] dark:text-slate-400 block">
                         Certificado
                       </span>
-                      <span className="font-bold text-[#081C59] dark:text-sky-400 tabular-nums">
+                      <span className="font-bold text-[#004E89] dark:text-sky-400 tabular-nums">
                         {formatUSD(lead.metrics.requestedAmountUSD, 0)}
                       </span>
                     </div>
@@ -353,7 +353,7 @@ export const LeadDrawer: React.FC<LeadDrawerProps> = ({
               type="button"
               disabled={leads.length === 0}
               onClick={handleExportCSV}
-              className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-[#081C59] dark:bg-[#0C6CFB] disabled:opacity-40 text-white text-xs font-semibold"
+              className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-[#004E89] dark:bg-[#008744] disabled:opacity-40 text-white text-xs font-semibold"
             >
               <FileSpreadsheet className="w-4 h-4" strokeWidth={1.5} />
               <span>Exportar CSV</span>
