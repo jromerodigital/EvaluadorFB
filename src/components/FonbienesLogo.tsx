@@ -10,12 +10,13 @@ export const FonbienesLogo: React.FC<FonbienesLogoProps> = ({
   className = 'h-9 sm:h-10 w-auto',
 }) => {
   const [imgError, setImgError] = useState(false);
+  const logoSrc = `${import.meta.env.BASE_URL}LogoFonbienes.png`;
 
   // In light mode, render the captured official LogoFonbienes.png from https://www.fonbienes.com.pe/inicio
   if (theme === 'light' && !imgError) {
     return (
       <img
-        src="/LogoFonbienes.png"
+        src={logoSrc}
         alt="FonBienes Perú EAFC S.A."
         onError={() => setImgError(true)}
         className={`${className} object-contain select-none transition-all duration-300`}

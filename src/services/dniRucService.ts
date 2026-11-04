@@ -1,4 +1,6 @@
-const APISPERU_TOKEN = import.meta.env.VITE_APISPERU_TOKEN || '';
+const APISPERU_TOKEN =
+  import.meta.env.VITE_APISPERU_TOKEN ||
+  'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImpvcmdlLmlubXVlYmxlc3BlQGdtYWlsLmNvbSIsImp0aSI6Ijk1OTI5MzJiMDdlYjAxMjQifQ.y9Z64Gr3eqp7g30BUEBXgXQAV1L2BPZeywUP5EKmclw';
 
 export interface DniResponse {
   success: boolean;
