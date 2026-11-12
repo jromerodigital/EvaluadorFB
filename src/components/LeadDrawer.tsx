@@ -11,6 +11,8 @@ import {
   AlertCircle,
   Clock,
   Users,
+  Webhook,
+  Loader2,
 } from 'lucide-react';
 import {
   CapturedLead,
@@ -26,6 +28,9 @@ interface LeadDrawerProps {
   onSelectLead: (lead: CapturedLead) => void;
   onDeleteLead: (id: string) => void;
   onClearAllLeads: () => void;
+  onResendWebhook?: (lead: CapturedLead) => Promise<boolean>;
+  onOpenWebhookModal?: () => void;
+  isWebhookActive?: boolean;
 }
 
 export const LeadDrawer: React.FC<LeadDrawerProps> = ({
@@ -35,12 +40,23 @@ export const LeadDrawer: React.FC<LeadDrawerProps> = ({
   onSelectLead,
   onDeleteLead,
   onClearAllLeads,
+  onResendWebhook,
+  onOpenWebhookModal,
+  isWebhookActive = false,
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [tierFilter, setTierFilter] = useState<'ALL' | QualificationTier>('ALL');
   const [confirmClear, setConfirmClear] = useState(false);
+  const [sendingLeadId, setSendingLeadId] = useState<string | null>(null);
 
   if (!isOpen) return null;
+
+  const handleResendSingle = async (lead: CapturedLead) => {
+    if (!onResendWebhook) return;
+    setSendingLeadId(lead.id);
+    await onResendWebhook(lead);
+    setSendingLeadId(null);
+  };
 
   const filteredLeads = leads.filter((lead) => {
     const matchesTier = tierFilter === 'ALL' || lead.metrics.tier === tierFilter;
@@ -272,6 +288,15 @@ export const LeadDrawer: React.FC<LeadDrawerProps> = ({
                         <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-[#F5F5F7] dark:bg-slate-700 text-[#6E6E73] dark:text-slate-300">
                           {lead.reservationCode}
                         </span>
+                        {lead.webhookSent ? (
+                          <span
+                            className="text-[10px] font-semibold text-[#008744] bg-[#E8F6EE] dark:bg-emerald-950/60 dark:text-emerald-400 px-1.5 py-0.5 rounded flex items-center gap-0.5"
+                            title={`Enviado al CRM: ${lead.webhookSentAt ? new Date(lead.webhookSentAt).toLocaleTimeString('es-PE') : 'OK'}`}
+                          >
+                            <Webhook className="w-2.5 h-2.5" />
+                            <span>CRM ✓</span>
+                          </span>
+                        ) : null}
                       </div>
                       <p className="text-xs text-[#6E6E73] dark:text-slate-400 mt-0.5">
                         {lead.documentType}: {lead.documentNumber} • {lead.district}
@@ -329,6 +354,23 @@ export const LeadDrawer: React.FC<LeadDrawerProps> = ({
                         <span>Ver</span>
                         <ArrowUpRight className="w-3.5 h-3.5" strokeWidth={1.5} />
                       </button>
+
+                      {onResendWebhook && (
+                        <button
+                          type="button"
+                          onClick={() => handleResendSingle(lead)}
+                          disabled={sendingLeadId === lead.id}
+                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-black/[0.08] dark:border-white/10 hover:bg-[#EBF3FA] dark:hover:bg-slate-700 text-xs font-semibold text-[#004E89] dark:text-sky-400 transition-colors"
+                          title="Enviar o reenviar este lead al Webhook CRM"
+                        >
+                          {sendingLeadId === lead.id ? (
+                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                          ) : (
+                            <Webhook className="w-3.5 h-3.5" strokeWidth={1.5} />
+                          )}
+                          <span className="hidden sm:inline">Webhook</span>
+                        </button>
+                      )}
                     </div>
 
                     <button
@@ -369,6 +411,22 @@ export const LeadDrawer: React.FC<LeadDrawerProps> = ({
               <span>JSON</span>
             </button>
           </div>
+
+          {/* Webhook Configuration Button in Drawer Footer */}
+          {onOpenWebhookModal && (
+            <button
+              type="button"
+              onClick={onOpenWebhookModal}
+              className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl border border-dashed border-[#004E89]/30 dark:border-sky-500/30 text-xs font-semibold text-[#004E89] dark:text-sky-400 hover:bg-[#EBF3FA] dark:hover:bg-slate-800 transition-colors"
+            >
+              <Webhook className="w-3.5 h-3.5" />
+              <span>
+                {isWebhookActive
+                  ? 'Webhook CRM Conectado (Configurar)'
+                  : 'Conectar Webhook CRM (Make / Zapier)'}
+              </span>
+            </button>
+          )}
 
           {leads.length > 0 && (
             <div className="pt-1 flex justify-center">

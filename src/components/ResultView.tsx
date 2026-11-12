@@ -9,6 +9,8 @@ import {
   Sparkles,
   Copy,
   Check,
+  Webhook,
+  Loader2,
 } from 'lucide-react';
 import {
   CapturedLead,
@@ -27,6 +29,9 @@ interface ResultViewProps {
   onUpdateAmountLive: (newAmountUSD: number) => void;
   onUpdateIncomeLive: (newTotalIncomePEN: number, isJoint: boolean) => void;
   onNewClientReset: () => void;
+  onResendWebhook?: (lead: CapturedLead) => Promise<boolean>;
+  onOpenWebhookModal?: () => void;
+  isWebhookActive?: boolean;
 }
 
 export const ResultView: React.FC<ResultViewProps> = ({
@@ -35,10 +40,21 @@ export const ResultView: React.FC<ResultViewProps> = ({
   onUpdateAmountLive,
   onUpdateIncomeLive,
   onNewClientReset,
+  onResendWebhook,
+  onOpenWebhookModal,
+  isWebhookActive = false,
 }) => {
   const isDark = theme === 'dark';
   const [showLiveSimulator, setShowLiveSimulator] = useState(false);
   const [copiedCode, setCopiedCode] = useState(false);
+  const [isRetryingWebhook, setIsRetryingWebhook] = useState(false);
+
+  const handleRetryWebhook = async () => {
+    if (!onResendWebhook) return;
+    setIsRetryingWebhook(true);
+    await onResendWebhook(lead);
+    setIsRetryingWebhook(false);
+  };
 
   const { metrics } = lead;
   const invOption =
@@ -136,8 +152,8 @@ export const ResultView: React.FC<ResultViewProps> = ({
           </div>
         )}
 
-        {/* Top Reservation Code Pill */}
-        <div className="flex justify-center mb-5">
+        {/* Top Reservation Code & Webhook Status Row */}
+        <div className="flex flex-wrap items-center justify-center gap-2 mb-5">
           <button
             type="button"
             onClick={handleCopyCode}
@@ -155,6 +171,59 @@ export const ResultView: React.FC<ResultViewProps> = ({
               <Copy className="w-3.5 h-3.5 opacity-60" strokeWidth={1.5} />
             )}
           </button>
+
+          {/* Webhook Delivery Indicator */}
+          {lead.webhookSent ? (
+            <span
+              className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full border text-[11px] font-semibold ${
+                isDark
+                  ? 'bg-emerald-950/80 border-emerald-700 text-emerald-300'
+                  : 'bg-[#E8F6EE] border-[#008744]/25 text-[#008744]'
+              }`}
+              title={`Enviado a CRM: ${lead.webhookSentAt ? new Date(lead.webhookSentAt).toLocaleTimeString('es-PE') : 'OK'}`}
+            >
+              <Webhook className="w-3 h-3" />
+              <span>CRM Conectado ✓</span>
+            </span>
+          ) : isWebhookActive ? (
+            <button
+              type="button"
+              onClick={handleRetryWebhook}
+              disabled={isRetryingWebhook}
+              className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full border text-[11px] font-semibold transition-all ${
+                isDark
+                  ? 'bg-amber-950/60 hover:bg-amber-900 border-amber-700 text-amber-300'
+                  : 'bg-amber-50 hover:bg-amber-100 border-amber-200 text-amber-700'
+              }`}
+              title="Reintentar envío al webhook configurado"
+            >
+              {isRetryingWebhook ? (
+                <>
+                  <Loader2 className="w-3 h-3 animate-spin" />
+                  <span>Enviando...</span>
+                </>
+              ) : (
+                <>
+                  <Webhook className="w-3 h-3" />
+                  <span>Reintentar Webhook</span>
+                </>
+              )}
+            </button>
+          ) : onOpenWebhookModal ? (
+            <button
+              type="button"
+              onClick={onOpenWebhookModal}
+              className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full border text-[11px] font-medium transition-all ${
+                isDark
+                  ? 'bg-slate-900/60 hover:bg-slate-800 border-slate-700 text-slate-400'
+                  : 'bg-white/60 hover:bg-white border-black/[0.08] text-[#6E6E73]'
+              }`}
+              title="Conectar Webhook para enviar a CRM / Make / Zapier"
+            >
+              <Webhook className="w-3 h-3 text-[#004E89] dark:text-sky-400" />
+              <span>Conectar Webhook</span>
+            </button>
+          ) : null}
         </div>
 
         {/* Central Circular Hero Icon */}

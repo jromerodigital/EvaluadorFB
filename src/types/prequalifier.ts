@@ -53,6 +53,8 @@ export interface CapturedLead extends SimulationInput {
   createdAt: string;
   reservationCode: string;
   metrics: EvaluationMetrics;
+  webhookSent?: boolean;
+  webhookSentAt?: string;
 }
 
 export const INVESTMENT_OPTIONS: {

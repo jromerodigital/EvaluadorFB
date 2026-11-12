@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Users, RefreshCw, Check, Sun, Moon } from 'lucide-react';
+import { Users, RefreshCw, Check, Sun, Moon, Webhook } from 'lucide-react';
 import { FonbienesLogo } from './FonbienesLogo';
 
 interface HeaderBarProps {
@@ -10,6 +10,8 @@ interface HeaderBarProps {
   exchangeRate: number;
   onChangeExchangeRate: (newRate: number) => void;
   onQuickReset: () => void;
+  isWebhookActive?: boolean;
+  onOpenWebhookModal?: () => void;
 }
 
 export const HeaderBar: React.FC<HeaderBarProps> = ({
@@ -20,6 +22,8 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
   exchangeRate,
   onChangeExchangeRate,
   onQuickReset,
+  isWebhookActive = false,
+  onOpenWebhookModal,
 }) => {
   const [editingRate, setEditingRate] = useState(false);
   const [rateDraft, setRateDraft] = useState(exchangeRate.toFixed(2));
@@ -143,6 +147,30 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
               <Sun className="w-4 h-4 text-amber-400" strokeWidth={1.5} />
             )}
           </button>
+
+          {/* Webhook / CRM Integration Button */}
+          {onOpenWebhookModal && (
+            <button
+              type="button"
+              onClick={onOpenWebhookModal}
+              className={`relative w-9 h-9 rounded-full border flex items-center justify-center transition-all ${
+                isDark
+                  ? 'bg-[#101D36] hover:bg-slate-800 border-slate-700 text-sky-400'
+                  : 'bg-[#F5F5F7] hover:bg-[#EBF3FA] border-black/[0.06] text-[#004E89]'
+              }`}
+              title={
+                isWebhookActive
+                  ? 'Webhook CRM Activo (clic para configurar)'
+                  : 'Configurar Webhook CRM (clic aquí)'
+              }
+              aria-label="Configurar Webhook"
+            >
+              <Webhook className="w-4 h-4" strokeWidth={1.5} />
+              {isWebhookActive && (
+                <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-[#101D36]" />
+              )}
+            </button>
+          )}
 
           {/* Leads Captured Today Drawer Trigger */}
           <button

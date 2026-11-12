@@ -51,6 +51,11 @@ import {
 import { HeaderBar } from './components/HeaderBar';
 import { ResultView } from './components/ResultView';
 import { LeadDrawer } from './components/LeadDrawer';
+import { WebhookModal } from './components/WebhookModal';
+import {
+  getStoredWebhookUrl,
+  sendLeadWebhook,
+} from './services/webhookService';
 
 const STORAGE_KEY_LEADS = 'fonbienes_expo_leads_v2';
 const STORAGE_KEY_RATE = 'fonbienes_expo_rate_v2';
@@ -177,6 +182,30 @@ export function App() {
   });
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [webhookUrl, setWebhookUrl] = useState<string>(() => getStoredWebhookUrl());
+  const [isWebhookModalOpen, setIsWebhookModalOpen] = useState(false);
+
+  // Webhook Resend Handler for ResultView and LeadDrawer
+  const handleResendWebhook = async (
+    leadToResend: CapturedLead
+  ): Promise<boolean> => {
+    const res = await sendLeadWebhook(leadToResend);
+    if (res.success) {
+      const updated: CapturedLead = {
+        ...leadToResend,
+        webhookSent: true,
+        webhookSentAt: new Date().toISOString(),
+      };
+      if (activeLead?.id === updated.id) {
+        setActiveLead(updated);
+      }
+      setLeads((prev) =>
+        prev.map((l) => (l.id === updated.id ? updated : l))
+      );
+      return true;
+    }
+    return false;
+  };
 
   useEffect(() => {
     try {
@@ -452,7 +481,23 @@ export function App() {
         createdAt: new Date().toISOString(),
         reservationCode: generateReservationCode(formData.documentNumber),
         metrics,
+        webhookSent: false,
       };
+
+      // Despachar webhook automáticamente en segundo plano si hay URL configurada
+      const targetWebhookUrl = getStoredWebhookUrl();
+      if (targetWebhookUrl) {
+        sendLeadWebhook(newLead, targetWebhookUrl, 'LEAD_PREQUALIFIED').then((res) => {
+          if (res.success) {
+            newLead.webhookSent = true;
+            newLead.webhookSentAt = new Date().toISOString();
+            setActiveLead((prev) => (prev?.id === newLead.id ? { ...newLead } : prev));
+            setLeads((prev) =>
+              prev.map((l) => (l.id === newLead.id ? { ...newLead } : l))
+            );
+          }
+        });
+      }
 
       setActiveLead(newLead);
       setLeads((prev) => [newLead, ...prev]);
@@ -576,6 +621,8 @@ export function App() {
         exchangeRate={exchangeRate}
         onChangeExchangeRate={handleExchangeRateChange}
         onQuickReset={handleNewClientReset}
+        isWebhookActive={!!webhookUrl}
+        onOpenWebhookModal={() => setIsWebhookModalOpen(true)}
       />
 
       {/* Centered, Clean Single-Column Container */}
@@ -729,6 +776,9 @@ export function App() {
             onUpdateAmountLive={handleUpdateAmountLive}
             onUpdateIncomeLive={handleUpdateIncomeLive}
             onNewClientReset={handleNewClientReset}
+            isWebhookActive={!!webhookUrl}
+            onOpenWebhookModal={() => setIsWebhookModalOpen(true)}
+            onResendWebhook={handleResendWebhook}
           />
         ) : (
           /* STEPS 1 TO 3: CLEAN CENTERED CARD */
@@ -1657,6 +1707,17 @@ export function App() {
           setLeads((prev) => prev.filter((item) => item.id !== id))
         }
         onClearAllLeads={() => setLeads([])}
+        isWebhookActive={!!webhookUrl}
+        onOpenWebhookModal={() => setIsWebhookModalOpen(true)}
+        onResendWebhook={handleResendWebhook}
+      />
+
+      {/* Webhook / CRM Settings Modal */}
+      <WebhookModal
+        isOpen={isWebhookModalOpen}
+        onClose={() => setIsWebhookModalOpen(false)}
+        theme={theme}
+        onSaved={(newUrl) => setWebhookUrl(newUrl)}
       />
     </div>
   );
