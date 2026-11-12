@@ -1,7 +1,8 @@
 import { CapturedLead, INVESTMENT_OPTIONS } from '../types/prequalifier';
 
 export const STORAGE_KEY_WEBHOOK_URL = 'fonbienes_webhook_url_v1';
-export const DEFAULT_WEBHOOK_URL = 'https://hook.us1.make.com/s9fbaro7v38dp1d78q3m1oetci0l6hfb';
+export const DEFAULT_WEBHOOK_URL =
+  'https://hook.us1.make.com/liejmuhowgn7s65afojgs3bu4o3btkec';
 
 export interface WebhookSendResult {
   success: boolean;
