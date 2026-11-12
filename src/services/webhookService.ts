@@ -37,7 +37,9 @@ export const saveStoredWebhookUrl = (url: string): void => {
 };
 
 /**
- * Construye el payload estandarizado para CRM, Make.com, Zapier, n8n o Google Sheets
+ * Construye el payload estandarizado para CRM, Make.com, Zapier, n8n o Google Sheets.
+ * Incluye las propiedades tanto a nivel raíz (flat) como en el objeto anidado "lead"
+ * para máxima compatibilidad con cualquier receptor de webhooks.
  */
 export const buildWebhookPayload = (
   lead: CapturedLead,
@@ -54,41 +56,44 @@ export const buildWebhookPayload = (
       ? 'Requiere Evaluación'
       : 'No Califica';
 
+  const leadData = {
+    id: lead.id,
+    reservationCode: lead.reservationCode,
+    createdAt: lead.createdAt,
+    documentType: lead.documentType,
+    documentNumber: lead.documentNumber,
+    fullName: lead.fullName,
+    phoneWhatsapp: lead.phoneWhatsapp,
+    phoneWhatsappFormatted: `+51 ${lead.phoneWhatsapp}`,
+    district: lead.district,
+    investmentType: lead.investmentType,
+    investmentTitle: invOption.title,
+    requestedAmountUSD: lead.metrics.requestedAmountUSD,
+    requestedAmountPEN: Number(
+      (lead.metrics.requestedAmountUSD * lead.exchangeRate).toFixed(2)
+    ),
+    exchangeRate: lead.exchangeRate,
+    monthlyInstallmentUSD: Number(lead.metrics.monthlyInstallmentUSD.toFixed(2)),
+    monthlyInstallmentPEN: Number(lead.metrics.monthlyInstallmentPEN.toFixed(2)),
+    incomeSourceType: lead.incomeSourceType || 'DEPENDIENTE',
+    dependentIncomePEN: lead.dependentIncome || 0,
+    independentIncomePEN: lead.independentIncome || 0,
+    isJointIncome: !!lead.isJointIncome,
+    jointSpouseIncomePEN: lead.isJointIncome ? lead.jointSpouseIncome || 0 : 0,
+    totalIncomePEN: Number(lead.metrics.clientIncomePEN.toFixed(2)),
+    incomeToQuotaRatio: Number(lead.metrics.incomeToQuotaRatio.toFixed(2)),
+    coveragePercent: lead.metrics.standardCoveragePercent,
+    tier: lead.metrics.tier,
+    statusLabel,
+    directQualifyingAmountUSD: lead.metrics.directQualifyingAmountUSD,
+  };
+
   return {
     event,
     timestamp: new Date().toISOString(),
     source: 'Precalificador Inmobiliario FonBienes (Feria)',
-    lead: {
-      id: lead.id,
-      reservationCode: lead.reservationCode,
-      createdAt: lead.createdAt,
-      documentType: lead.documentType,
-      documentNumber: lead.documentNumber,
-      fullName: lead.fullName,
-      phoneWhatsapp: lead.phoneWhatsapp,
-      phoneWhatsappFormatted: `+51 ${lead.phoneWhatsapp}`,
-      district: lead.district,
-      investmentType: lead.investmentType,
-      investmentTitle: invOption.title,
-      requestedAmountUSD: lead.metrics.requestedAmountUSD,
-      requestedAmountPEN: Number(
-        (lead.metrics.requestedAmountUSD * lead.exchangeRate).toFixed(2)
-      ),
-      exchangeRate: lead.exchangeRate,
-      monthlyInstallmentUSD: Number(lead.metrics.monthlyInstallmentUSD.toFixed(2)),
-      monthlyInstallmentPEN: Number(lead.metrics.monthlyInstallmentPEN.toFixed(2)),
-      incomeSourceType: lead.incomeSourceType || 'DEPENDIENTE',
-      dependentIncomePEN: lead.dependentIncome || 0,
-      independentIncomePEN: lead.independentIncome || 0,
-      isJointIncome: !!lead.isJointIncome,
-      jointSpouseIncomePEN: lead.isJointIncome ? lead.jointSpouseIncome || 0 : 0,
-      totalIncomePEN: Number(lead.metrics.clientIncomePEN.toFixed(2)),
-      incomeToQuotaRatio: Number(lead.metrics.incomeToQuotaRatio.toFixed(2)),
-      coveragePercent: lead.metrics.standardCoveragePercent,
-      tier: lead.metrics.tier,
-      statusLabel,
-      directQualifyingAmountUSD: lead.metrics.directQualifyingAmountUSD,
-    },
+    ...leadData, // Propiedades directas a nivel raíz para mapeo fácil en columnas
+    lead: leadData, // Estructura jerárquica para APIs tradicionales
   };
 };
 
