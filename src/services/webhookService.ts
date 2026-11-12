@@ -57,7 +57,37 @@ export const buildWebhookPayload = (
       ? 'Requiere Evaluación'
       : 'No Califica';
 
+  const resultadoColor =
+    lead.metrics.tier === 'GREEN'
+      ? 'verde'
+      : lead.metrics.tier === 'YELLOW'
+      ? 'amarillo'
+      : 'rojo';
+
+  const interesesCalculadosUSD = Number(
+    (lead.metrics.requestedAmountUSD * 0.2124).toFixed(2)
+  );
+
   const leadData = {
+    // === CAMPOS PRINCIPALES SOLICITADOS EN ESPAÑOL ===
+    dni: lead.documentNumber,
+    nombreCompleto: lead.fullName,
+    montoDeIntereses: interesesCalculadosUSD, // Intereses administrativos FonBienes (21.24%)
+    montoDeInteres: lead.metrics.requestedAmountUSD, // Monto del certificado solicitado en USD
+    montoCertificadoUSD: lead.metrics.requestedAmountUSD,
+    tipoDeIngreso:
+      lead.incomeSourceType === 'INDEPENDIENTE'
+        ? 'Independiente'
+        : lead.incomeSourceType === 'MIXTO'
+        ? 'Mixto'
+        : 'Dependiente',
+    montoTotalDeIngresos: Number(lead.metrics.clientIncomePEN.toFixed(2)),
+    distritoDeInversion: lead.district,
+    celular: lead.phoneWhatsapp,
+    resultadoCalificacion: resultadoColor, // "verde" | "amarillo" | "rojo"
+    colorCalificacion: resultadoColor,
+
+    // === METADATOS Y DETALLES COMPLEMENTARIOS ===
     id: lead.id,
     reservationCode: lead.reservationCode,
     createdAt: lead.createdAt,
@@ -76,13 +106,9 @@ export const buildWebhookPayload = (
     exchangeRate: lead.exchangeRate,
     monthlyInstallmentUSD: Number(lead.metrics.monthlyInstallmentUSD.toFixed(2)),
     monthlyInstallmentPEN: Number(lead.metrics.monthlyInstallmentPEN.toFixed(2)),
+    cuotaMensualUSD: Number(lead.metrics.monthlyInstallmentUSD.toFixed(2)),
+    cuotaMensualPEN: Number(lead.metrics.monthlyInstallmentPEN.toFixed(2)),
     incomeSourceType: lead.incomeSourceType || 'DEPENDIENTE',
-    tipoDeIngreso:
-      lead.incomeSourceType === 'INDEPENDIENTE'
-        ? 'Independiente'
-        : lead.incomeSourceType === 'MIXTO'
-        ? 'Mixto'
-        : 'Dependiente',
     tipoIngreso:
       lead.incomeSourceType === 'INDEPENDIENTE'
         ? 'Independiente'
