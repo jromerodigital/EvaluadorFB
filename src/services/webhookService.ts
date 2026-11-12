@@ -77,6 +77,25 @@ export const buildWebhookPayload = (
     monthlyInstallmentUSD: Number(lead.metrics.monthlyInstallmentUSD.toFixed(2)),
     monthlyInstallmentPEN: Number(lead.metrics.monthlyInstallmentPEN.toFixed(2)),
     incomeSourceType: lead.incomeSourceType || 'DEPENDIENTE',
+    tipoDeIngreso:
+      lead.incomeSourceType === 'INDEPENDIENTE'
+        ? 'Independiente'
+        : lead.incomeSourceType === 'MIXTO'
+        ? 'Mixto'
+        : 'Dependiente',
+    tipoIngreso:
+      lead.incomeSourceType === 'INDEPENDIENTE'
+        ? 'Independiente'
+        : lead.incomeSourceType === 'MIXTO'
+        ? 'Mixto'
+        : 'Dependiente',
+    incomeSourceLabel:
+      lead.incomeSourceType === 'INDEPENDIENTE'
+        ? 'Independiente'
+        : lead.incomeSourceType === 'MIXTO'
+        ? 'Mixto (Planilla + Independiente)'
+        : 'Dependiente (Planilla)',
+    montoMensualPEN: Number(lead.metrics.clientIncomePEN.toFixed(2)),
     dependentIncomePEN: lead.dependentIncome || 0,
     independentIncomePEN: lead.independentIncome || 0,
     isJointIncome: !!lead.isJointIncome,
